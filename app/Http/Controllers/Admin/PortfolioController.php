@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\TeamMember;
+use App\Models\Team;
 use App\Models\Project;
 use App\Models\Service;
 use App\Models\ContactMessage;
@@ -13,7 +13,7 @@ class PortfolioController extends Controller
 {
     public function index()
     {
-        $team = TeamMember::all();
+        $team = Team::all();
         $projects = Project::all();
         $services = Service::all();
         $contacts = ContactMessage::latest()->get();
@@ -33,13 +33,13 @@ class PortfolioController extends Controller
             $data['photo'] = $request->file('photo')->store('team', 'public');
         }
 
-        TeamMember::create($data);
+        Team::create($data);
         return back()->with('success','عضو الفريق تم إضافته');
     }
 
     public function deleteTeam($id)
     {
-        $member = TeamMember::findOrFail($id);
+        $member = Team::findOrFail($id);
         $member->delete();
         return back()->with('success','تم حذف العضو');
     }
