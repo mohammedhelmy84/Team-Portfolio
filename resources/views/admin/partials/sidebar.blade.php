@@ -22,17 +22,21 @@
             أعضاء الفريق
         </a>
 
-        <a href="#projects-section" class="list-group-item list-group-item-action">
+        <a href="{{ route('admin.projects.index') }}"
+            class="list-group-item list-group-item-action {{ request()->routeIs('admin.projects.*') ? 'active shadow-sm' : '' }}">
             المشاريع
         </a>
 
-        <a href="#services-section" class="list-group-item list-group-item-action">
+        <a href="{{ route('admin.services.index') }}"
+            class="list-group-item list-group-item-action {{ request()->routeIs('admin.services.*') ? 'active shadow-sm' : '' }}">
             الخدمات
         </a>
 
-        <a href="#contacts-section" class="list-group-item list-group-item-action">
+        <a href="{{ route('admin.contacts.index') }}"
+            class="list-group-item list-group-item-action {{ request()->routeIs('admin.contacts.*') ? 'active shadow-sm' : '' }}">
             رسائل التواصل
         </a>
+
     </div>
 
 </div>

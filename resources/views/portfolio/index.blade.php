@@ -14,7 +14,7 @@
 
 @include('portfolio.partials.services')
 
-@include('portfolio.partials.contact')
+@include('portfolio.partials.contacts')
 
 @include('portfolio.partials.footer')
 

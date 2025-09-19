@@ -3,8 +3,8 @@
 @section('content')
     <div class="card shadow-sm border-0">
         <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i> إضافة عضو جديد</h5>
-            <a href="{{ route('admin.team.index') }}" class="btn btn-light btn-sm">
+            <h5 class="mb-0"><i class="fas fa-folder-plus me-2"></i> إضافة مشروع جديد</h5>
+            <a href="{{ route('admin.projects.index') }}" class="btn btn-light btn-sm">
                 <i class="fas fa-arrow-left"></i> رجوع
             </a>
         </div>
@@ -19,29 +19,34 @@
                     </ul>
                 </div>
             @endif
-            @include('alerts.messages')
-            <form action="{{ route('admin.team.store') }}" method="POST" enctype="multipart/form-data" class="row g-3">
+
+            <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data" class="row g-3">
                 @csrf
 
-                <!-- الاسم -->
+                <!-- العنوان -->
                 <div class="col-md-6">
-                    <label for="name" class="form-label">الاسم</label>
-                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}"
-                        placeholder="ادخل اسم العضو" required>
+                    <label for="title" class="form-label">عنوان المشروع</label>
+                    <input type="text" id="title" name="title" class="form-control" value="{{ old('title') }}" required>
                 </div>
 
-                <!-- الدور -->
+                <!-- الرابط -->
                 <div class="col-md-6">
-                    <label for="role" class="form-label">الدور</label>
-                    <input type="text" id="role" name="role" class="form-control" value="{{ old('role') }}"
-                        placeholder="ادخل دور العضو" required>
+                    <label for="link" class="form-label">رابط المشروع</label>
+                    <input type="url" id="link" name="link" class="form-control" value="{{ old('link') }}">
+                </div>
+
+                <!-- الوصف -->
+                <div class="col-md-12">
+                    <label for="description" class="form-label">الوصف</label>
+                    <textarea id="description" name="description" class="form-control" rows="4"
+                        required>{{ old('description') }}</textarea>
                 </div>
 
                 <!-- الصورة -->
                 <div class="col-md-12">
                     <label for="photo" class="form-label">الصورة</label>
                     <input type="file" id="photo" name="photo" class="form-control" accept="image/*" required>
-                    <small class="text-muted">يرجى رفع صورة مربعة (مثلاً 400x400)</small>
+                    <small class="text-muted">يرجى رفع صورة مناسبة لعرض المشروع</small>
                 </div>
 
                 <!-- زر الحفظ -->

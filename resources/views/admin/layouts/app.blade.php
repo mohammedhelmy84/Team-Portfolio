@@ -14,6 +14,8 @@
 
     <!-- Fontawesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- DataTables CSS مع Bootstrap5 -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -181,6 +183,27 @@
             .hero {
                 padding: 3rem 0;
             }
+
+            #sidebar {
+                display: none !important;
+            }
+
+            #sidebar.active {
+                display: block !important;
+                position: fixed;
+                right: 0;
+                top: 56px;
+                /* تحت النافبار */
+                width: 220px;
+                height: 100%;
+                background: #0b1220;
+                z-index: 100 !important;
+                /* نفس لون الخلفية */
+            }
+
+            #main-content {
+                margin-right: 0 !important;
+            }
         }
     </style>
 </head>
@@ -189,14 +212,14 @@
     <div class="container-fluid p-0">
         @include('admin.partials.navbar')
         @include('admin.partials.sidebar')
-           <!-- Main Content -->
+        <!-- Main Content -->
         <div id="main-content" style="margin-right:220px; padding:20px; margin-top:56px; transition: margin 0.3s;">
 
-        {{-- المحتوى الرئيسي --}}
-        @yield('content')
+            {{-- المحتوى الرئيسي --}}
+            @yield('content')
 
-        {{-- الفوتر --}}
-       </div>
+            {{-- الفوتر --}}
+        </div>
     </div>
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -251,19 +274,139 @@
         const sidebarIcon = document.getElementById('sidebarIcon');
 
         toggleBtn.addEventListener('click', () => {
-            if (sidebar.style.right === '-220px') {
-                sidebar.style.right = '0';
-                mainContent.style.marginRight = '220px';
-                sidebarIcon.classList.remove('fa-angle-right');
-                sidebarIcon.classList.add('fa-angle-left'); // سهم يشير لليسار عند فتح القائمة
+            if (window.innerWidth <= 768) {
+                // 📱 الموبايل
+                sidebar.classList.toggle('active'); // يظهر/يخفي
+                sidebarIcon.classList.toggle('fa-angle-right');
+                sidebarIcon.classList.toggle('fa-angle-left');
             } else {
-                sidebar.style.right = '-220px';
-                mainContent.style.marginRight = '0';
-                sidebarIcon.classList.remove('fa-angle-left');
-                sidebarIcon.classList.add('fa-angle-right'); // سهم يشير لليمين عند إخفاء القائمة
+                // 💻 الديسكتوب
+                if (sidebar.style.right === '-220px') {
+                    sidebar.style.right = '0';
+                    mainContent.style.marginRight = '220px';
+                    sidebarIcon.classList.remove('fa-angle-right');
+                    sidebarIcon.classList.add('fa-angle-left');
+                } else {
+                    sidebar.style.right = '-220px';
+                    mainContent.style.marginRight = '0';
+                    sidebarIcon.classList.remove('fa-angle-left');
+                    sidebarIcon.classList.add('fa-angle-right');
+                }
             }
         });
+
+        // الاشعارات
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdown = document.getElementById('notificationsDropdown');
+            const menu = document.getElementById('notificationsMenu');
+            const routeUrl = "{{ route('admin.notifications') }}";
+
+            // تحديث البادج والقائمة
+            function updateNotifications() {
+                fetch(routeUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        let badge = document.getElementById('notificationBadge');
+
+                        // تحديث البادج
+                        if (data.count > 0) {
+                            if (!badge) {
+                                badge = document.createElement('span');
+                                badge.id = "notificationBadge";
+                                badge.className = "position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger";
+                                dropdown.appendChild(badge);
+                            }
+                            badge.textContent = data.count;
+                        } else if (badge) {
+                            badge.remove();
+                        }
+
+                        // تحديث القائمة
+                        if (menu) {
+                            menu.innerHTML = "";
+                            if (data.messages.length > 0) {
+                                data.messages.forEach(msg => {
+                                    const li = document.createElement('li');
+                                    li.className = "dropdown-item";
+                                    li.innerHTML = `
+                                <strong>${msg.name}</strong>: ${msg.message.substring(0, 30)}
+                                <small class="text-muted d-block">${new Date(msg.created_at).toLocaleString()}</small>
+                            `;
+                                    menu.appendChild(li);
+                                });
+                            } else {
+                                menu.innerHTML = '<li class="dropdown-item text-center">لا توجد رسائل جديدة</li>';
+                            }
+                        }
+                    })
+                    .catch(err => console.error(err));
+            }
+
+            // أول تحميل
+            updateNotifications();
+
+            // يحدث كل 15 ثانية
+            setInterval(updateNotifications, 15000);
+        });
+
     </script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- DataTables core + Bootstrap5 integration -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- تشغيل DataTable -->
+    <script>
+        $('#TeamTable').DataTable({
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json",
+                emptyTable: "لا يوجد أعضاء حالياً"
+            },
+            pageLength: 10
+        });
+
+
+        $(document).ready(function () {
+            $('#contactsTable').DataTable({
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json",
+                    emptyTable: "لا توجد رسائل"
+                },
+                pageLength: 5,
+                order: [[3, 'desc']], // ترتيب حسب التاريخ
+                columnDefs: [
+                    { orderable: false, targets: [5] } // منع الترتيب في عمود الإجراء
+                ]
+            });
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            $('#servicesTable').DataTable({
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json",
+                    emptyTable: "لا توجد خدمات مضافة بعد"
+                },
+                pageLength: 10,
+                order: [[0, 'asc']]
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            $('#ProjectsTable').DataTable({
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json",
+                    emptyTable: "لا توجد مشاريع مضافة بعد"
+                },
+                pageLength: 10,
+                order: [[0, 'asc']]
+            });
+        });
+    </script>
+
 </body>
 
 </html>

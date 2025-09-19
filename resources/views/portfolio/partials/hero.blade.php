@@ -1,6 +1,16 @@
 <!-- resources/views/portfolio/partials/hero.blade.php -->
 <header class="hero">
     <div class="container">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @include('alerts.messages')
         <div class="row align-items-center">
             <div class="col-lg-6" data-aos="fade-left">
                 <h1 class="display-5 fw-bold">

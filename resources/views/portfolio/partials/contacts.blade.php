@@ -16,21 +16,22 @@
             </div>
 
             <div class="col-md-6" data-aos="fade-left">
-                <form class="card p-3 card-glass">
+                <form class="card p-3 card-glass" action="{{ route('contacts.store') }}" method="POST">
+                    @csrf
                     <div class="mb-3">
                         <label class="form-label">الاسم</label>
-                        <input class="form-control" placeholder="اسمك" />
+                        <input type="text" class="form-control" name="name" placeholder="اسمك" />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">البريد الإلكتروني</label>
-                        <input class="form-control" placeholder="email@example.com" />
+                        <input type="email" class="form-control" name="email" placeholder="email@example.com" />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">الرسالة</label>
-                        <textarea class="form-control" rows="4" placeholder="ماذا تريد؟"></textarea>
+                        <textarea class="form-control" name="message" rows="4" placeholder="ماذا تريد؟"></textarea>
                     </div>
                     <div class="d-grid">
-                        <button type="button" class="btn btn-accent">ارسال</button>
+                        <button type="submit" class="btn btn-accent">ارسال</button>
                     </div>
                 </form>
             </div>

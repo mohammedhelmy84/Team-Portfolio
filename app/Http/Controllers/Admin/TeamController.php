@@ -42,7 +42,8 @@ class TeamController extends Controller
 
         Team::create($data);
 
-        return back()->with('success', '✅ تم إضافة العضو بنجاح');
+        return redirect()->route('admin.team.index')->with('success', '✅ تم إضافة العضو بنجاح');
+
     }
 
     /**

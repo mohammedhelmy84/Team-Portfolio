@@ -7,43 +7,35 @@
         </div>
 
         <div class="row g-4">
-            <div class="col-md-4" data-aos="flip-left">
-                <div class="card card-glass p-3 h-100">
-                    <img src="{{ asset('images/cms.jpg') }}" class="project-thumb mb-3" alt="proj">
+            @forelse($projects as $project)
+                <div class="col-md-4" data-aos="flip-left">
+                    <div class="card card-glass p-3 h-100">
+                        <img src="{{ asset('storage/' . $project->photo) }}" 
+                             class="project-thumb mb-3" 
+                             alt="{{ $project->title }}">
 
-                    <h5 class="text-white">نظام إدارة محتوى</h5>
-                    <p class="small text-white">Laravel + Vue - لوحة تحكم متقدمة ونظام صلاحيات.</p>
-                    <div class="mt-2">
-                        <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#projModal">عرض التفاصيل</button>
+                        <h5 class="text-white">{{ $project->title }}</h5>
+                        <p class="small text-white">{{ $project->description }}</p>
+                        <div class="mt-2">
+                            @if($project->link)
+                                <a href="{{ $project->link }}" target="_blank" class="btn btn-outline-light btn-sm">
+                                    عرض المشروع
+                                </a>
+                            @else
+                                <button class="btn btn-outline-light btn-sm" disabled>
+                                    لا يوجد رابط
+                                </button>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-4" data-aos="flip-left" data-aos-delay="80">
-                <div class="card card-glass p-3 h-100">
-                    <img src="{{ asset('images/ecommerce.jpg') }}" class="project-thumb mb-3" alt="proj">
-                    <h5 class="text-white">تطبيق تجارة إلكترونية</h5>
-                    <p class="small text-white">React + Node - تجربة مستخدم سلسة ودعم بوابات دفع.</p>
-                    <div class="mt-2">
-                        <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#projModal">عرض التفاصيل</button>
+            @empty
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        لا يوجد مشاريع مضافة حتى الآن
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-4" data-aos="flip-left" data-aos-delay="160">
-                <div class="card card-glass p-3 h-100">
-                    <img src="{{ asset('images/edu.jpg') }}" class="project-thumb mb-3" alt="proj">
-                    <h5 class="text-white">بوابة تعليمية</h5>
-                    <p class="small text-white">MERN Stack - موديولات تعليمية وامتحانات إلكترونية.</p>
-                    <div class="mt-2">
-                        <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#projModal">عرض التفاصيل</button>
-                    </div>
-                </div>
-            </div>
-
+            @endforelse
         </div>
     </div>
 </section>

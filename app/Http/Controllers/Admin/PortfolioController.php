@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Team;
 use App\Models\Project;
 use App\Models\Service;
-use App\Models\ContactMessage;
+use App\Models\Contact;
 
 class PortfolioController extends Controller
 {
@@ -16,7 +16,7 @@ class PortfolioController extends Controller
         $team = Team::all();
         $projects = Project::all();
         $services = Service::all();
-        $contacts = ContactMessage::latest()->get();
+        $contacts = Contact::latest()->get();
         return view('portfolio.index', compact('team','projects','services','contacts'));
     }
 
@@ -92,7 +92,7 @@ class PortfolioController extends Controller
     // CONTACT
     public function deleteContact($id)
     {
-        $msg = ContactMessage::findOrFail($id);
+        $msg = Contact::findOrFail($id);
         $msg->delete();
         return back()->with('success','تم حذف الرسالة');
     }
